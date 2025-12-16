@@ -1,0 +1,16 @@
+﻿<Window x:Class="Mei.Views.ConfirmationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mei.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="ConfirmationView" Height="300" Width="400">
+    <Grid>
+        <TextBlock Text="CONFIRM ACTIONS?" Margin="140,80,0,0"/>
+        <Button Content="Accept" HorizontalAlignment="Left" Margin="100,189,0,0" VerticalAlignment="Top" Height="35" Width="65"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Margin="240,189,0,0" VerticalAlignment="Top" Height="35" Width="65"/>
+
+    </Grid>
+</Window>

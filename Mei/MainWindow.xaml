@@ -1,0 +1,49 @@
+﻿<Window x:Class="Mei.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mei" xmlns:views="clr-namespace:Mei.Views"
+        xmlns:viewmodels="clr-namespace:Mei.ViewModels"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="450" Width="850">
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+                <views:LoginView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:MainWindowViewModel}">
+                <views:MainWindowView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:FormAddViewModel}">
+                <views:LoginView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:FormUpdateViewModel}">
+                <views:LoginView/>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+
+        <!--
+                <ContentControl Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+                    <views:LoginView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:MainWindowViewModel}">
+                    <views:MainWindowView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:FormAddViewModel}">
+                    <views:LoginView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:FormUpdateViewModel}">
+                    <views:LoginView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+        -->
+
+    </Grid>
+</Window>

@@ -1,0 +1,30 @@
+﻿<Window x:Class="Mei.Views.FormAddView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mei.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="AddFormView" Height="450" Width="400">
+    <Grid>
+        <StackPanel Margin="20,59,20,90">
+
+            <TextBlock Text="ADD ITEM" Margin="10" HorizontalAlignment="Center" /> 
+            <TextBlock Text="ITEM NAME" />
+            <TextBox Height="24" Text="{Binding ItemName, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Text="ITEM DESCRIPTION"/>
+            <TextBox Height="24" Text="{Binding ItemDescription, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Text="ITEM CATEGORY"/>
+            <TextBox Height="24" Text="{Binding ItemCategory, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Text="QUANTITY"/>
+            <TextBox Height="24" Text="{Binding ItemQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <Button Command="{Binding FormAddSubmitCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Content="ADD" HorizontalAlignment="Left" Margin="110,354,0,0" VerticalAlignment="Top" Height="30" Width="50"/>
+        <Button Command="{Binding FormAddCancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Content="CANCEL" HorizontalAlignment="Left" Margin="240,354,0,0" VerticalAlignment="Top" Height="30" Width="50"/>
+
+    </Grid>
+</Window>

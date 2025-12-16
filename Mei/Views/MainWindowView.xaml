@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Mei.Views.MainWindowView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mei.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+        <Button Command="{Binding AddCommand}" Content="Add" HorizontalAlignment="Left" Margin="641,53,0,0" VerticalAlignment="Top" Width="42" />
+        <Button Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedItem}" Content="Update" HorizontalAlignment="Left" Margin="696,53,0,0" VerticalAlignment="Top" />
+        <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedItem}" Content="Delete" HorizontalAlignment="Left" Margin="752,53,0,0" VerticalAlignment="Top"/>
+        <DataGrid 
+            x:Name="DD" 
+            Margin="10,86,10,10"
+            ItemsSource="{Binding ItemInfo}"
+            SelectedItem="{Binding SelectedItem}"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding ItemName}" Width="4*"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding ItemDescription}" Width="4*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding ItemCategory}" Width="1*"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding ItemQty}"  Width="1*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <ComboBox  Name="category" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="250"/>
+
+    </Grid>
+</UserControl>
