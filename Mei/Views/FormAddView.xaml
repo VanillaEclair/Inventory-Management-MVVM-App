@@ -16,9 +16,11 @@
 
             <TextBlock Text="ITEM DESCRIPTION"/>
             <TextBox Height="24" Text="{Binding ItemDescription, UpdateSourceTrigger=PropertyChanged}"/>
+            
 
             <TextBlock Text="ITEM CATEGORY"/>
-            <TextBox Height="24" Text="{Binding ItemCategory, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox ItemsSource="{Binding Categories , UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding ItemCategory}" Text="Select Category" />
+
 
             <TextBlock Text="QUANTITY"/>
             <TextBox Height="24" Text="{Binding ItemQuantity, UpdateSourceTrigger=PropertyChanged}"/>
@@ -28,3 +30,4 @@
 
     </Grid>
 </Window>
+    

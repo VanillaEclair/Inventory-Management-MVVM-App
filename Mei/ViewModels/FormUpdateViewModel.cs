@@ -4,9 +4,11 @@ using Mei.Services;
 using Mei.Stores;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Mei.ViewModels
@@ -14,8 +16,9 @@ namespace Mei.ViewModels
     public class FormUpdateViewModel: ViewModelBase
     {
 		private int itemID;
+        public ObservableCollection<string> Categories { get; }
 
-		public int ItemID
+        public int ItemID
 		{
 			get { return itemID; }
 			set { 
@@ -48,14 +51,14 @@ namespace Mei.ViewModels
             }
 		}
 
-		private string? itemCategory;
+		private string? selectedCategory;
 
-		public string? ItemCategory
-		{
-			get { return itemCategory; }
+		public string? SelectedCategory
+        {
+			get { return selectedCategory; }
 			set 
-			{ 
-				itemCategory = value;
+			{
+                selectedCategory = value;
                 OnPropertyChanged();
             }
 		}
@@ -87,32 +90,40 @@ namespace Mei.ViewModels
 
 		//}'
 
-
-		private readonly MainWindowViewModel _mainWindowViewModel;
 		private readonly EditItemStore _editItemStore;
 		private readonly SQLfunctions _sQLfunctions;
 		private readonly RefreshStore _refreshStore;
+		private readonly CategoryStore _categoryStore;
 
 		public ICommand FormSubmitCommand { get; }
 		public ICommand FormCancelCommand { get; }
 
-        public FormUpdateViewModel(EditItemStore editItemStore, SQLfunctions sQLfunctions, RefreshStore refreshStore)
+        public FormUpdateViewModel(EditItemStore editItemStore, SQLfunctions sQLfunctions, RefreshStore refreshStore, CategoryStore categoryStore)
         {
+
+            _sQLfunctions = sQLfunctions;
+            _refreshStore = refreshStore;
+            _categoryStore = categoryStore;
+
 
             var Item = editItemStore.ItemToEdit;
 
+
+            Categories = _categoryStore.CategoryToStore;
+
             ItemID = Item.ItemID;
             ItemName = Item.ItemName;
-            ItemCategory = Item.ItemCategory;
+            SelectedCategory = Item.ItemCategory;
             ItemDescription = Item.ItemDescription;
             ItemQuantity = Item.ItemQty;
 
 
-            _sQLfunctions = sQLfunctions;
-            _refreshStore = refreshStore;
+
 
 
             FormSubmitCommand = new FormUpdateSubmitCommand(this, _sQLfunctions, _refreshStore);
+            FormCancelCommand = new FormAddCancelCommand();
+
 
 
 

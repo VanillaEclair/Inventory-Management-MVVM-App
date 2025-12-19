@@ -19,14 +19,15 @@ namespace Mei.Commands
         private readonly SQLfunctions _sQLFunctions;
         private readonly EditItemStore _editItemStore;
         private readonly RefreshStore _refreshStore;
+        private readonly CategoryStore _categoryStore;
 
 
-        public MainUpdateCommand(SQLfunctions sQLFunctions, EditItemStore editItemStore, RefreshStore refreshStore)
+        public MainUpdateCommand(SQLfunctions sQLFunctions, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _sQLFunctions = sQLFunctions;
             _editItemStore = editItemStore;
             _refreshStore = refreshStore;
-
+            _categoryStore = categoryStore;
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -51,8 +52,6 @@ namespace Mei.Commands
         public override void Execute(object? parameter)
         {
             var item = parameter as MainWindowModel;
-            MessageBox.Show(item.ItemName);
-
             _editItemStore.ItemToEdit = item;
 
 
@@ -85,7 +84,7 @@ namespace Mei.Commands
 
             FormUpdateView updateForm = new FormUpdateView
             {
-                DataContext = new FormUpdateViewModel(_editItemStore, _sQLFunctions, _refreshStore)
+                DataContext = new FormUpdateViewModel(_editItemStore, _sQLFunctions, _refreshStore, _categoryStore)
             };
 
             updateForm.Show();

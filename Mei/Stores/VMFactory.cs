@@ -15,19 +15,20 @@ namespace Mei.Stores
         private readonly SQLfunctions _sQLfunctions;
         private readonly NavigationStore _navigationStore;
         private readonly RefreshStore _refreshStore;
+        private readonly CategoryStore _categoryStore;
 
-        public VMFactory(SQLfunctions sQLfunctions, NavigationStore navigationStore, RefreshStore refreshStore)
+        public VMFactory(SQLfunctions sQLfunctions, NavigationStore navigationStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _sQLfunctions = sQLfunctions;
             _navigationStore = navigationStore;
             _refreshStore = refreshStore;
+            _categoryStore = categoryStore;
         }
 
         public FormAddViewModel CreateAddFormViewModel()
         {
-            // Inject dependencies here if needed
 
-            return new FormAddViewModel(_sQLfunctions, _navigationStore, _refreshStore);
+            return new FormAddViewModel(_sQLfunctions, _navigationStore, _refreshStore, _categoryStore);
         }
     }
 }

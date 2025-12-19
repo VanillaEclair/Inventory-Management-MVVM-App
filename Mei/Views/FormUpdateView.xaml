@@ -16,15 +16,15 @@
             
             <TextBlock Text="ITEM DESCRIPTION"/>
             <TextBox Height="24" Text="{Binding ItemDescription, UpdateSourceTrigger=PropertyChanged}"/>
-            
+
             <TextBlock Text="ITEM CATEGORY"/>
-            <TextBox Height="24" Text="{Binding ItemCategory, UpdateSourceTrigger=PropertyChanged}"/>
-            
+            <ComboBox  Height="24" ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCategory}" Text="Select Category" />
+
             <TextBlock Text="QUANTITY"/>
             <TextBox Height="24" Text="{Binding ItemQuantity, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
-        <Button Command="{Binding FormSubmitCommand}" Content="ADD" HorizontalAlignment="Left" Margin="110,354,0,0" VerticalAlignment="Top" Height="30" Width="50"/>
-        <Button Command="{Binding FormCancelCommand}" Content="CANCEL" HorizontalAlignment="Left" Margin="240,354,0,0" VerticalAlignment="Top" Height="30" Width="50"/>
+        <Button Command="{Binding FormSubmitCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Content="UPDATE" HorizontalAlignment="Left" Margin="110,354,0,0" VerticalAlignment="Top" Height="30" Width="50"/>
+        <Button Command="{Binding FormCancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Content="CANCEL" HorizontalAlignment="Left" Margin="240,354,0,0" VerticalAlignment="Top" Height="30" Width="50"/>
 
     </Grid>
 </Window>

@@ -15,6 +15,7 @@ namespace Mei.DependencyInjection
             services.AddSingleton<RefreshStore>();
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<EditItemStore>();
+            services.AddSingleton<CategoryStore>();
 
             // SERVICES
             services.AddSingleton<NavigationService>();

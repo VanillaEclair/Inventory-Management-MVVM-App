@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Mei.ViewModels
@@ -17,7 +18,7 @@ namespace Mei.ViewModels
     {
         //Transfer All To MainViewModel????
         private string? itemName;
-
+        public ObservableCollection<string> Categories { get; }
 
         public string? ItemName
         {
@@ -65,22 +66,27 @@ namespace Mei.ViewModels
             }
         }
 
+
         public ICommand FormAddSubmitCommand { get; }
         public ICommand FormAddCancelCommand { get; }
 
         private readonly SQLfunctions _sQLfunctions;
         private readonly NavigationStore _navigationStore;
         private readonly RefreshStore _refreshStore;
+        private readonly CategoryStore _categoryStore;
 
-        public FormAddViewModel(SQLfunctions sQLfunctions, NavigationStore navigationStore, RefreshStore refreshStore)
+        public FormAddViewModel(SQLfunctions sQLfunctions, NavigationStore navigationStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _sQLfunctions = sQLfunctions;
             _navigationStore = navigationStore;
             _refreshStore = refreshStore;
+            _categoryStore = categoryStore;
 
-            FormAddSubmitCommand = new FormAddSubmitCommand(this, _sQLfunctions, _refreshStore);
+            Categories = _categoryStore.CategoryToStore;
+
+            FormAddSubmitCommand = new FormAddSubmitCommand(this, _sQLfunctions, _refreshStore, _categoryStore);
             FormAddCancelCommand = new FormAddCancelCommand();
-
+      
         }
 
 

@@ -12,11 +12,13 @@ namespace Mei.Models
         public int ItemID { get; set; }
         public string? ItemName { get; set; }
         public string? ItemDescription { get; set; }
+
+        //replace with ID 
         public string? ItemCategory { get; set; }
         public string? ItemImg { get; set; }
         public int ItemQty { get; set; }
 
-        public List<string>? ItemList { get; set; }
+        public List<string>? Category { get; set; } = new List<string>();
 
 
 

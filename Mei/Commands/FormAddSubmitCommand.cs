@@ -19,14 +19,16 @@ namespace Mei.Commands
         private readonly FormAddViewModel _formAddViewModel;
         private readonly SQLfunctions _sQlFunctions;
         private readonly RefreshStore _refreshStore;
+        private readonly CategoryStore _categoryStore;
 
 
-        public FormAddSubmitCommand(FormAddViewModel viewModel, SQLfunctions sQlFunctions, RefreshStore refreshStore)
+        public FormAddSubmitCommand(FormAddViewModel viewModel, SQLfunctions sQlFunctions, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _formAddViewModel = viewModel;
             _formAddViewModel.PropertyChanged += OnViewModelPropertyChanged;
             _sQlFunctions = sQlFunctions;
             _refreshStore = refreshStore;
+            _categoryStore = categoryStore;
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -74,10 +76,11 @@ namespace Mei.Commands
 
                 MessageBox.Show("Items Added Theorethically");
 
+                _refreshStore.RequestRefresh();
 
                 window.Close();
 
-                _refreshStore.RequestRefresh();
+               
 
                 //Pass to Services?
             }

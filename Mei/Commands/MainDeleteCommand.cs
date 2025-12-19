@@ -13,10 +13,24 @@ namespace Mei.Commands
     public class MainDeleteCommand : CommandBase
     {
         private readonly SQLfunctions _sQLFunctions;
+        private readonly RefreshStore _refreshStore;
 
-        public MainDeleteCommand(SQLfunctions sQLFunctions)
+
+        public MainDeleteCommand(SQLfunctions sQLFunctions, RefreshStore refreshStore)
         {
             _sQLFunctions = sQLFunctions;
+            _refreshStore = refreshStore;
+        }
+
+        public override bool CanExecute(object? parameter)
+        {
+            var item = parameter as MainWindowModel;
+
+            return item != null &&
+                   !string.IsNullOrWhiteSpace(item.ItemName) &&
+                   !string.IsNullOrWhiteSpace(item.ItemDescription) &&
+                   !string.IsNullOrWhiteSpace(item.ItemCategory) &&
+                   item.ItemQty > 0;
         }
 
         public override void Execute(object? parameter)
@@ -26,7 +40,8 @@ namespace Mei.Commands
             try
             {
                 _sQLFunctions.DeleteQuery(item.ItemID);
-                MessageBox.Show("Delete: " + item.ItemID);
+                _refreshStore.RequestRefresh();
+                MessageBox.Show("Deleted: " + item.ItemName);
             }
             catch (Exception)
             {

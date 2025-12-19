@@ -1,4 +1,4 @@
-﻿using Mei.Models;
+﻿ using Mei.Models;
 using Mei.ViewModels;
 using MySql.Data.MySqlClient;
 using System;
@@ -15,18 +15,113 @@ namespace Mei.Services
 {
     public class SQLfunctions
     {
+        //Secure Connection String Later
         private string connStr = "server=localhost;user=root;database=requiem;port=3306;password=root;";
+        private const string categoryQry = "SELECT * FROM category";
+        private const string tableQry = "SELECT * FROM item";
 
 
+        //public MainWindowModel GetCategory(string query)
+        //{
+        //    var model = new MainWindowModel();
 
-        public List<MainWindowModel> DataQuery(string query)
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(connStr))
+        //        {
+        //            string Query = query;
+        //            conn.Open();
+
+        //            MySqlCommand cmd = new MySqlCommand(Query, conn);
+
+        //            MySqlDataReader rdr = cmd.ExecuteReader();
+
+
+        //            while (rdr.Read())
+        //            {
+        //                if (!rdr.IsDBNull(rdr.GetOrdinal("item_category")))
+        //                {
+        //                    model.Category.Add(rdr.GetString("item_category"));
+        //                }
+        //            }
+        //            rdr.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        MessageBox.Show(ex.Message);
+        //    }
+
+        //    return model;
+        //}
+
+        //public List<string> GetCategories()
+        //{
+        //    var categories = new List<string>();
+
+        //    using var conn = new MySqlConnection(connStr);
+        //    using var cmd = new MySqlCommand(
+        //        "SELECT DISTINCT item_category FROM item",
+        //        conn
+        //    );
+
+        //    conn.Open();
+        //    using var rdr = cmd.ExecuteReader();
+
+        //    while (rdr.Read())
+        //    {
+        //        categories.Add(rdr.GetString("item_category"));
+        //    }
+
+        //    return categories;
+        //}
+
+        public List<string> GetCategory()
+        {
+
+            var items = new List<string>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connStr))
+                {
+                    const string Query = categoryQry;
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand(Query, conn);
+
+                    MySqlDataReader rdr = cmd.ExecuteReader();
+
+
+                    while (rdr.Read())
+                    {
+
+                        //MessageBox.Show(rdr.GetString("item_category"))
+                        items.Add(rdr.GetString("item_category"));
+                                            
+                    }
+
+
+                    rdr.Close();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return items;
+        }
+
+        //Refactor this to return string instead of
+        public IEnumerable<MainWindowModel> DataQuery()
         {
             var items = new List<MainWindowModel>();
             try
             {
                 using(MySqlConnection conn = new MySqlConnection(connStr))
                 {
-                    string Query = query;
+                    const string Query = tableQry;
                     conn.Open();
 
                     MySqlCommand cmd = new MySqlCommand(Query, conn);
@@ -167,7 +262,6 @@ namespace Mei.Services
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        MessageBox.Show(item.ItemCategory);
 
                         cmd.Parameters.AddWithValue("@itemName", item.ItemName);
                         cmd.Parameters.AddWithValue("@itemDesc", item.ItemDescription);

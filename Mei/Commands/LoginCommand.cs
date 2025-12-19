@@ -19,48 +19,45 @@ namespace Mei.Commands
         private readonly VMFactory _vmFactory;
         private readonly LoginViewModel _loginViewModel;
         private readonly SQLfunctions _sQLfunctions;
-        private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly EditItemStore _editItemStore;
         private readonly RefreshStore _refreshStore;
+        private readonly CategoryStore _categoryStore;
 
 
 
         //public LoginCommand(NavigationStore navigateStore, AuthService authService, VMFactory vMFactory)
 
-        public LoginCommand(NavigationStore navigateStore, AuthService authService, VMFactory vmFactory, LoginViewModel loginViewModel, SQLfunctions sQLfunctions, MainWindowViewModel mainWindowViewModel, EditItemStore editItemStore, RefreshStore refreshStore)
+        public LoginCommand(NavigationStore navigateStore, AuthService authService, VMFactory vmFactory, LoginViewModel loginViewModel, SQLfunctions sQLfunctions, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _navigateStore = navigateStore;
             _authService = authService;
             _vmFactory = vmFactory ?? throw new ArgumentNullException(nameof(vmFactory));
             _loginViewModel = loginViewModel;
             _sQLfunctions = sQLfunctions;
-            _mainWindowViewModel = mainWindowViewModel;
             _editItemStore = editItemStore;
             _refreshStore = refreshStore;
+            _categoryStore = categoryStore;
         }
 
         public override void Execute(object? parameter)
         {
-            //Button Should not work when empty
 
-
-            // Use the existing viewmodel values directly
             var username = _loginViewModel.InputUsername;
-            var password = _loginViewModel.InputPassword; // <-- was incorrectly username
+            var password = _loginViewModel.InputPassword; 
  
             bool isUser = _authService.Authenticate(username, password);
 
             if (isUser)
             {
+                _loginViewModel.StatusMessage = "Correct Pass";
                 MessageBox.Show("User");
-                // Navigate using a properly injected factory (adjust call to match your VMFactory API)
-                _navigateStore.CurrentViewModel = new MainWindowViewModel(_vmFactory, _navigateStore, _sQLfunctions, _editItemStore, _refreshStore);
+                _navigateStore.CurrentViewModel = new MainWindowViewModel(_vmFactory, _navigateStore, _sQLfunctions, _editItemStore, _refreshStore, _categoryStore);
             } 
             else
             {
+                _loginViewModel.StatusMessage = "Correct Pass";
                 MessageBox.Show("Not User");
-                _navigateStore.CurrentViewModel = new MainWindowViewModel(_vmFactory, _navigateStore, _sQLfunctions, _editItemStore, _refreshStore);
-                // keep on login screen or navigate appropriately
+                _navigateStore.CurrentViewModel = new MainWindowViewModel(_vmFactory, _navigateStore, _sQLfunctions, _editItemStore, _refreshStore, _categoryStore);
             }
         }
     }
