@@ -1,4 +1,5 @@
 ﻿using Mei.Commands;
+using Mei.Interfaces;
 using Mei.Models;
 using Mei.MVVM;
 using Mei.Services;
@@ -70,23 +71,25 @@ namespace Mei.ViewModels
         public ICommand FormAddSubmitCommand { get; }
         public ICommand FormAddCancelCommand { get; }
 
-        private readonly SQLfunctions _sQLfunctions;
         private readonly NavigationStore _navigationStore;
         private readonly RefreshStore _refreshStore;
         private readonly CategoryStore _categoryStore;
+        private readonly IItemRepository _itemRepository;
 
-        public FormAddViewModel(SQLfunctions sQLfunctions, NavigationStore navigationStore, RefreshStore refreshStore, CategoryStore categoryStore)
+        public FormAddViewModel(IItemRepository itemRepository, NavigationStore navigationStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
-            _sQLfunctions = sQLfunctions;
             _navigationStore = navigationStore;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
+            _itemRepository = itemRepository;
 
             Categories = _categoryStore.CategoryToStore;
 
-            FormAddSubmitCommand = new FormAddSubmitCommand(this, _sQLfunctions, _refreshStore, _categoryStore);
+            //Remove Passing of Viewmodels
+
+            FormAddSubmitCommand = new FormAddSubmitCommand(this, _itemRepository, _refreshStore, _categoryStore);
             FormAddCancelCommand = new FormAddCancelCommand();
-      
+
         }
 
 

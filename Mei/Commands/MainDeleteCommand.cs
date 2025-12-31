@@ -1,4 +1,5 @@
-﻿using Mei.Models;
+﻿using Mei.Interfaces;
+using Mei.Models;
 using Mei.Services;
 using Mei.Stores;
 using System;
@@ -10,15 +11,16 @@ using System.Windows;
 
 namespace Mei.Commands
 {
-    public class MainDeleteCommand : CommandBase
+    public class MainDeleteCommand : CommandBaseAsync
     {
-        private readonly SQLfunctions _sQLFunctions;
+        //Turn to Async
         private readonly RefreshStore _refreshStore;
+        private readonly IItemRepository _itemRepository;
 
 
-        public MainDeleteCommand(SQLfunctions sQLFunctions, RefreshStore refreshStore)
+        public MainDeleteCommand(IItemRepository itemRepository, RefreshStore refreshStore)
         {
-            _sQLFunctions = sQLFunctions;
+            _itemRepository = itemRepository;
             _refreshStore = refreshStore;
         }
 
@@ -33,13 +35,13 @@ namespace Mei.Commands
                    item.ItemQty > 0;
         }
 
-        public override void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
             var item = parameter as MainWindowModel;
 
             try
             {
-                _sQLFunctions.DeleteQuery(item.ItemID);
+                await _itemRepository.DeleteQueryAsync(item.ItemID);
                 _refreshStore.RequestRefresh();
                 MessageBox.Show("Deleted: " + item.ItemName);
             }
@@ -49,8 +51,10 @@ namespace Mei.Commands
                 throw;
             }
 
+            _refreshStore.RequestRefresh();
 
-            
+
+
         }
     }
 }

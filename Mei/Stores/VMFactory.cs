@@ -1,4 +1,5 @@
-﻿using Mei.Models;
+﻿using Mei.Interfaces;
+using Mei.Models;
 using Mei.Services;
 using Mei.ViewModels;
 using System;
@@ -11,24 +12,25 @@ namespace Mei.Stores
 {
     public class VMFactory
     {
-        //private readonly IItemRepository _repo;
-        private readonly SQLfunctions _sQLfunctions;
+        private readonly IItemRepository _itemRepository;
+
         private readonly NavigationStore _navigationStore;
         private readonly RefreshStore _refreshStore;
         private readonly CategoryStore _categoryStore;
 
-        public VMFactory(SQLfunctions sQLfunctions, NavigationStore navigationStore, RefreshStore refreshStore, CategoryStore categoryStore)
+        public VMFactory(IItemRepository itemRepository, NavigationStore navigationStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
-            _sQLfunctions = sQLfunctions;
+
             _navigationStore = navigationStore;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
+            _itemRepository = itemRepository;
         }
 
         public FormAddViewModel CreateAddFormViewModel()
         {
 
-            return new FormAddViewModel(_sQLfunctions, _navigationStore, _refreshStore, _categoryStore);
+            return new FormAddViewModel(_itemRepository, _navigationStore, _refreshStore, _categoryStore);
         }
     }
 }

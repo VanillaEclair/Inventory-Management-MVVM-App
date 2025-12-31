@@ -1,4 +1,5 @@
 ﻿using Mei.Commands;
+using Mei.Interfaces;
 using Mei.Models;
 using Mei.MVVM;
 using Mei.Services;
@@ -15,9 +16,13 @@ namespace Mei.ViewModels
     public class MainWindowViewModel: ViewModelBase
     {
         public ObservableCollection<MainWindowModel> ItemInfo { get;}
+        private readonly NavigationStore _navigationStore;
+        private readonly VMFactory _factory;
+        private readonly EditItemStore _editItemStore;
+        private readonly RefreshStore _refreshStore;
+        private readonly CategoryStore _categoryStore;
+        private readonly IItemRepository _itemRepository;
 
-        //public bool isWindowOpen = false;
-        //private bool _isLoaded;
 
         //Refactor Command Codes
         //public RelayCommand AddCommand => new RelayCommand(execute => AddWindow());
@@ -25,27 +30,70 @@ namespace Mei.ViewModels
         //public RelayCommand DeleteCommand => new RelayCommand(execute => UpdateWindow());
 
 
-        public void LoadCategories()
+        public async Task LoadCategoriesAsync()
         {
             _categoryStore.CategoryToStore.Clear();
+            var data = await _itemRepository.GetCategoryAsync();
 
-            foreach (var c in _sQLfunctions.GetCategory())
+            foreach (var c in data)
             {
                 _categoryStore.CategoryToStore.Add(c);
             }
         }
 
-        //Move to Services
-        public void LoadData()
+        public async Task LoadAsync()
         {
             ItemInfo.Clear();
 
-            foreach (var e in _sQLfunctions.DataQuery())
-            {
-                ItemInfo.Add(e);
+            IEnumerable<MainWindowModel> data =
+                string.IsNullOrWhiteSpace(SearchItem)
+                    ? await _itemRepository.AsyncDataQuery()
+                    : await _itemRepository.SearchQuery(SearchItem);
 
+            foreach (var item in data)
+                ItemInfo.Add(item);
+        }
+
+
+
+        //public async Task LoadDataAsync()
+        //{
+        //    ItemInfo.Clear();
+
+        //    var data = await _itemRepository.AsyncDataQuery();
+
+        //    foreach (var e in data)
+        //    {
+        //        ItemInfo.Add(e);
+
+        //    }
+        //}
+
+        //public async Task LoadSearchData()
+        //{
+        //    ItemInfo.Clear();
+
+        //    var data = await _itemRepository.AsyncDataQuery();
+
+        //    foreach (var e in data)
+        //    {
+        //        ItemInfo.Add(e);
+
+        //    }
+        //}
+
+        private string searchItem;
+
+        public string SearchItem
+        {
+            get { return searchItem; }
+            set 
+            {
+                searchItem = value;
+                OnPropertyChanged();
             }
         }
+
 
         private MainWindowModel selectedItem;
 
@@ -64,40 +112,42 @@ namespace Mei.ViewModels
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UpdateCommand { get; }
+        public ICommand SearchCommand { get; }
+        public ICommand RefreshCommand { get; }
 
 
-        private readonly NavigationStore _navigationStore;
-        private readonly VMFactory _factory;
-        private readonly SQLfunctions _sQLfunctions;
-        private readonly EditItemStore _editItemStore;
-        private readonly RefreshStore _refreshStore;
-        private readonly CategoryStore _categoryStore;
 
 
-        public MainWindowViewModel(VMFactory factory, NavigationStore navigationStore, SQLfunctions sQLfunctions, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
+
+        public MainWindowViewModel(VMFactory factory, NavigationStore navigationStore, IItemRepository itemRepository, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
 
             _factory = factory;
             _navigationStore = navigationStore;
-            _sQLfunctions = sQLfunctions;
             _editItemStore = editItemStore;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
+            _itemRepository = itemRepository;
 
 
 
             ItemInfo = new ObservableCollection<MainWindowModel>();
-            AddCommand = new MainAddCommand(_factory, _navigationStore, _sQLfunctions, _refreshStore, _categoryStore);
-            DeleteCommand = new MainDeleteCommand(_sQLfunctions, _refreshStore);
-            UpdateCommand = new MainUpdateCommand(_sQLfunctions, _editItemStore, _refreshStore, _categoryStore);
+            AddCommand = new MainAddCommand(_factory, _navigationStore, _itemRepository, _refreshStore, _categoryStore);
+            DeleteCommand = new MainDeleteCommand(_itemRepository, _refreshStore);
+            UpdateCommand = new MainUpdateCommand(_itemRepository, _editItemStore, _refreshStore, _categoryStore);
+            SearchCommand = new MainSearchCommand(this, _itemRepository);
+            RefreshCommand = new MainRefreshCommand(_refreshStore, this);
 
 
-            _refreshStore.RefreshRequested += () => LoadData();
+   
+            _refreshStore.RefreshRequested += () => LoadAsync();
 
             _refreshStore.RequestRefresh();
 
 
-            LoadCategories();
+            LoadCategoriesAsync();
+ 
+
 
 
             //Questionable to MVVM architecture

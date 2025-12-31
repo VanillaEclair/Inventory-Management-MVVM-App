@@ -1,83 +1,21 @@
-﻿ using Mei.Models;
-using Mei.ViewModels;
+﻿using Mei.Interfaces;
+using Mei.Models;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
 
 namespace Mei.Services
 {
-    public class SQLfunctions
+    public class SQLfunctions: IItemRepository
     {
         //Secure Connection String Later
         private string connStr = "server=localhost;user=root;database=requiem;port=3306;password=root;";
         private const string categoryQry = "SELECT * FROM category";
         private const string tableQry = "SELECT * FROM item";
 
-
-        //public MainWindowModel GetCategory(string query)
-        //{
-        //    var model = new MainWindowModel();
-
-        //    try
-        //    {
-        //        using (MySqlConnection conn = new MySqlConnection(connStr))
-        //        {
-        //            string Query = query;
-        //            conn.Open();
-
-        //            MySqlCommand cmd = new MySqlCommand(Query, conn);
-
-        //            MySqlDataReader rdr = cmd.ExecuteReader();
-
-
-        //            while (rdr.Read())
-        //            {
-        //                if (!rdr.IsDBNull(rdr.GetOrdinal("item_category")))
-        //                {
-        //                    model.Category.Add(rdr.GetString("item_category"));
-        //                }
-        //            }
-        //            rdr.Close();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        MessageBox.Show(ex.Message);
-        //    }
-
-        //    return model;
-        //}
-
-        //public List<string> GetCategories()
-        //{
-        //    var categories = new List<string>();
-
-        //    using var conn = new MySqlConnection(connStr);
-        //    using var cmd = new MySqlCommand(
-        //        "SELECT DISTINCT item_category FROM item",
-        //        conn
-        //    );
-
-        //    conn.Open();
-        //    using var rdr = cmd.ExecuteReader();
-
-        //    while (rdr.Read())
-        //    {
-        //        categories.Add(rdr.GetString("item_category"));
-        //    }
-
-        //    return categories;
-        //}
-
-        public List<string> GetCategory()
+        public async Task<IEnumerable<string>> GetCategoryAsync()
         {
 
             var items = new List<string>();
@@ -86,14 +24,14 @@ namespace Mei.Services
                 using (MySqlConnection conn = new MySqlConnection(connStr))
                 {
                     const string Query = categoryQry;
-                    conn.Open();
+                    await conn.OpenAsync();
 
                     MySqlCommand cmd = new MySqlCommand(Query, conn);
 
-                    MySqlDataReader rdr = cmd.ExecuteReader();
+                    using var rdr = await cmd.ExecuteReaderAsync();
 
 
-                    while (rdr.Read())
+                    while (await rdr.ReadAsync())
                     {
 
                         //MessageBox.Show(rdr.GetString("item_category"))
@@ -113,23 +51,21 @@ namespace Mei.Services
             return items;
         }
 
-        //Refactor this to return string instead of
-        public IEnumerable<MainWindowModel> DataQuery()
+        public async Task<IEnumerable<MainWindowModel>> AsyncDataQuery()
         {
             var items = new List<MainWindowModel>();
             try
             {
                 using(MySqlConnection conn = new MySqlConnection(connStr))
                 {
-                    const string Query = tableQry;
-                    conn.Open();
+                    await conn.OpenAsync();
 
-                    MySqlCommand cmd = new MySqlCommand(Query, conn);
+                    MySqlCommand cmd = new MySqlCommand(tableQry, conn);
 
-                    MySqlDataReader rdr = cmd.ExecuteReader();
+                    using var rdr = await cmd.ExecuteReaderAsync();
                     
 
-                    while (rdr.Read())
+                    while (await rdr.ReadAsync())
                     {
                         items.Add(new MainWindowModel
                         {
@@ -153,7 +89,7 @@ namespace Mei.Services
 
         }
 
-        public void AddQuery(AddItem item)
+        public async Task AddQueryAsync(AddItem item)
         {
             try
             {
@@ -162,7 +98,7 @@ namespace Mei.Services
                     string query = "INSERT INTO item (itemName, itemDesc, itemType, itemImg, itemQty) " +
                                    "VALUES (@itemName, @itemDesc, @itemType, 'Murder' , @itemQty)";
 
-                    conn.Open();
+                    await conn.OpenAsync();
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -171,7 +107,7 @@ namespace Mei.Services
                         cmd.Parameters.AddWithValue("@itemType", item.ItemCategory);
                         cmd.Parameters.AddWithValue("@itemQty", item.ItemQuantity);
 
-                        cmd.ExecuteNonQuery();
+                        await cmd.ExecuteNonQueryAsync();
                     }
                 }
             }
@@ -182,37 +118,7 @@ namespace Mei.Services
             }
         }
 
-        //public void AddQuery(string itemName, string itemDesc, string itemType, string itemImg, string itemQty)
-        //{
-        //    try
-        //    {
-        //        using (MySqlConnection conn = new(connStr))
-        //        {
-        //            string query = "INSERT INTO item (itemName, itemDesc, itemType, itemImg, itemQty) " +
-        //                           "VALUES (@itemName, @itemDesc, @itemType, @itemImg , @itemQty)";
-
-        //            conn.Open();
-
-        //            using (MySqlCommand cmd = new MySqlCommand(query, conn))
-        //            {
-        //                cmd.Parameters.AddWithValue("@itemName", itemName);
-        //                cmd.Parameters.AddWithValue("@itemDesc", itemDesc);
-        //                cmd.Parameters.AddWithValue("@itemType", itemType);
-        //                cmd.Parameters.AddWithValue("@itemImg", itemImg);
-        //                cmd.Parameters.AddWithValue("@itemQty", itemQty);
-
-        //                cmd.ExecuteNonQuery();
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
-
-        public void DeleteQuery(int Id)
+        public async Task DeleteQueryAsync(int Id)
         {
             try
             {
@@ -222,13 +128,13 @@ namespace Mei.Services
                 {
                     string query = $"DELETE FROM item WHERE idItem=@Id";
 
-                    conn.Open();
+                    await conn.OpenAsync();
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Id", Id);
 
-                        cmd.ExecuteNonQuery();
+                        await cmd.ExecuteNonQueryAsync();
                     }
                 }
 
@@ -241,7 +147,7 @@ namespace Mei.Services
 
         }
 
-        public void UpdateQuery(AddItem item)
+        public async Task UpdateQueryAsync(AddItem item)
         {
             try
             {
@@ -258,7 +164,7 @@ namespace Mei.Services
                                 ";
 
 
-                    conn.Open();
+                    await conn.OpenAsync();
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -270,7 +176,7 @@ namespace Mei.Services
                         cmd.Parameters.AddWithValue("@itemQty", item.ItemQuantity);
                         cmd.Parameters.AddWithValue("@id", item.Id); 
 
-                        cmd.ExecuteNonQuery();
+                        await cmd.ExecuteNonQueryAsync();
                     }
                 }
             }
@@ -280,5 +186,141 @@ namespace Mei.Services
                 throw;
             }
         }
+
+        public async Task<IEnumerable<MainWindowModel>> SearchQuery(string term)
+        {
+            var items = new List<MainWindowModel>();
+
+            using var conn = new MySqlConnection(connStr);
+            using var cmd = conn.CreateCommand();
+
+            cmd.CommandText = "SELECT * FROM item WHERE itemName LIKE @term";
+            cmd.Parameters.AddWithValue("@term", $"%{term}%");
+
+            await conn.OpenAsync();
+            using var rdr = await cmd.ExecuteReaderAsync();
+
+            while (await rdr.ReadAsync())
+            {
+                items.Add(new MainWindowModel
+                {
+                    ItemID = rdr.IsDBNull("idItem") ? 0 : rdr.GetInt32("idItem"),
+                    ItemName = rdr.IsDBNull("itemName") ? "" : rdr.GetString("itemName"),
+                    ItemDescription = rdr.IsDBNull("ItemDesc") ? "" : rdr.GetString("ItemDesc"),
+                    ItemCategory = rdr.IsDBNull("itemType") ? "" : rdr.GetString("itemType"),
+                    ItemImg = rdr.IsDBNull("itemImg") ? "" : rdr.GetString("itemImg"),
+                    ItemQty = rdr.IsDBNull("itemQty") ? 0 : rdr.GetInt32("itemQty")
+                });
+            }
+
+            return items;
+        }
+
+
     }
 }
+
+
+
+
+
+//Backup
+
+//public async IAsyncEnumerable<MainWindowModel> AsyncDataQuery()
+//{
+//    var items = new List<MainWindowModel>();
+//    try
+//    {
+//        using (MySqlConnection conn = new MySqlConnection(connStr))
+//        {
+//            const string Query = tableQry;
+//            await conn.OpenAsync();
+
+//            MySqlCommand cmd = new MySqlCommand(Query, conn);
+
+//            using var rdr = await cmd.ExecuteReaderAsync();
+
+
+//            while (await rdr.ReadAsync())
+//            {
+//                items.Add(new MainWindowModel
+//                {
+//                    ItemID = rdr.IsDBNull("idItem") ? 0 : rdr.GetInt32("idItem"),
+//                    ItemName = rdr.IsDBNull("itemName") ? "" : rdr.GetString("itemName"),
+//                    ItemDescription = rdr.IsDBNull("ItemDesc") ? "" : rdr.GetString("ItemDesc"),
+//                    ItemCategory = rdr.IsDBNull("itemType") ? "" : rdr.GetString("itemType"),
+//                    ItemImg = rdr.IsDBNull("itemImg") ? "" : rdr.GetString("itemImg"),
+//                    ItemQty = rdr.IsDBNull("itemQty") ? 0 : rdr.GetInt32("itemQty")
+//                });
+//            }
+//            rdr.Close();
+//        }
+//    }
+//    catch (MySqlException ex)
+//    {
+//        MessageBox.Show(ex.Message);
+//    }
+
+//    return items;
+
+//}
+
+
+
+
+//BackUP code
+//public MainWindowModel GetCategory(string query)
+//{
+//    var model = new MainWindowModel();
+
+//    try
+//    {
+//        using (MySqlConnection conn = new MySqlConnection(connStr))
+//        {
+//            string Query = query;
+//            conn.Open();
+
+//            MySqlCommand cmd = new MySqlCommand(Query, conn);
+
+//            MySqlDataReader rdr = cmd.ExecuteReader();
+
+
+//            while (rdr.Read())
+//            {
+//                if (!rdr.IsDBNull(rdr.GetOrdinal("item_category")))
+//                {
+//                    model.Category.Add(rdr.GetString("item_category"));
+//                }
+//            }
+//            rdr.Close();
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+
+//        MessageBox.Show(ex.Message);
+//    }
+
+//    return model;
+//}
+
+//public List<string> GetCategories()
+//{
+//    var categories = new List<string>();
+
+//    using var conn = new MySqlConnection(connStr);
+//    using var cmd = new MySqlCommand(
+//        "SELECT DISTINCT item_category FROM item",
+//        conn
+//    );
+
+//    conn.Open();
+//    using var rdr = cmd.ExecuteReader();
+
+//    while (rdr.Read())
+//    {
+//        categories.Add(rdr.GetString("item_category"));
+//    }
+
+//    return categories;
+//}

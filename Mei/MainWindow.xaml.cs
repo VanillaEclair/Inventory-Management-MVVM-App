@@ -22,8 +22,6 @@ namespace Mei
         public MainWindow()
         {
             InitializeComponent();
-            //Add Data Context Changing Later
-            //DataContext = new MainWindowViewModel();
 
         }        
     }

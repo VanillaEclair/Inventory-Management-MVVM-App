@@ -1,8 +1,11 @@
-﻿using Mei.Models;
+﻿using Mei.Interfaces;
+using Mei.Models;
 using Mei.Services;
 using Mei.Stores;
 using Mei.ViewModels;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 using System.Windows.Navigation;
 
 namespace Mei.DependencyInjection
@@ -11,22 +14,33 @@ namespace Mei.DependencyInjection
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
+
+            //CONFIG
+            var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+            services.AddSingleton<IConfiguration>(configuration);
+
             // STORES
             services.AddSingleton<RefreshStore>();
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<EditItemStore>();
             services.AddSingleton<CategoryStore>();
 
+
             // SERVICES
             services.AddSingleton<NavigationService>();
+            //Add Connection string here later
+            services.AddSingleton<IItemRepository, SQLfunctions>();
             services.AddTransient<AuthService>();
-            services.AddTransient<SQLfunctions>();
+            //services.AddTransient<SQLfunctions>();
 
             // FACTORY
             services.AddSingleton<VMFactory>();
 
             // VIEWMODELS
-            services.AddTransient<MainViewModel>();
+            //services.AddTransient<MainViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<FormAddViewModel>();

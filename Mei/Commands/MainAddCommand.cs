@@ -1,4 +1,5 @@
-﻿using Mei.Services;
+﻿using Mei.Interfaces;
+using Mei.Services;
 using Mei.Stores;
 using Mei.ViewModels;
 using Mei.Views;
@@ -15,18 +16,19 @@ namespace Mei.Commands
     {
         private readonly VMFactory _factory;
         private readonly NavigationStore _navigateStore;
-        private readonly SQLfunctions _sQLfunctions;
         private readonly RefreshStore _refreshStore;
         private readonly CategoryStore _categoryStore;
+        private readonly IItemRepository _itemRepository;
 
 
-        public MainAddCommand(VMFactory factory, NavigationStore navigateStore, SQLfunctions sQLfunctions, RefreshStore refreshStore, CategoryStore categoryStore)
+        public MainAddCommand(VMFactory factory, NavigationStore navigateStore, IItemRepository itemRepository, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _factory = factory;
             _navigateStore = navigateStore;
-            _sQLfunctions = sQLfunctions;
+            //_sQLfunctions = sQLfunctions;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
+            _itemRepository = itemRepository;
         }
 
         public override void Execute(object? parameter)
@@ -68,7 +70,7 @@ namespace Mei.Commands
 
             FormAddView addForm = new FormAddView
             {
-                DataContext = new FormAddViewModel(_sQLfunctions, _navigateStore, _refreshStore, _categoryStore)
+                DataContext = new FormAddViewModel(_itemRepository, _navigateStore, _refreshStore, _categoryStore)
             };
 
             addForm.Show();

@@ -1,41 +1,41 @@
-﻿using Mei.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using Mei.MVVM;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace Mei.Stores
-{
-    public class FormAddNavStore
-    {
-
-
-        private ViewModelBase? _currentViewModel;
-        public ViewModelBase? CurrentViewModel
-        {
-            get => _currentViewModel;
+//namespace Mei.Stores
+//{
+//    public class FormAddNavStore
+//    {
 
 
-            set
-            {
-                _currentViewModel = value;
-                OnCurrentViewModelChanged();
-            }
-        }
+//        private ViewModelBase? _currentViewModel;
+//        public ViewModelBase? CurrentViewModel
+//        {
+//            get => _currentViewModel;
 
-        public bool IsOpen => CurrentViewModel != null;
 
-        public event Action? CurrentViewModelChanged;
+//            set
+//            {
+//                _currentViewModel = value;
+//                OnCurrentViewModelChanged();
+//            }
+//        }
 
-        public void Close()
-        {
-            CurrentViewModel = null;
-        }
+//        public bool IsOpen => CurrentViewModel != null;
 
-        private void OnCurrentViewModelChanged()
-        {
-            CurrentViewModelChanged?.Invoke();
-        }
-    }
-}
+//        public event Action? CurrentViewModelChanged;
+
+//        public void Close()
+//        {
+//            CurrentViewModel = null;
+//        }
+
+//        private void OnCurrentViewModelChanged()
+//        {
+//            CurrentViewModelChanged?.Invoke();
+//        }
+//    }
+//}

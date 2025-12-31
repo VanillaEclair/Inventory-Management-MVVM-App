@@ -8,6 +8,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
+        <TextBox Text="{Binding SearchItem, UpdateSourceTrigger=PropertyChanged}" Height="20" HorizontalAlignment="Left" Width="250" Margin="10,53,10,0" VerticalAlignment="Top"/>
+        <Button Command="{Binding SearchCommand}" CommandParameter="{Binding SearchItem}"  Content="Search" HorizontalAlignment="Left" Margin="250,53,0,0" VerticalAlignment="Top" Width="42" />
+        <Button Command="{Binding RefreshCommand}" Content="Refresh" HorizontalAlignment="Left" Margin="310,53,0,0" VerticalAlignment="Top" Width="42" />
         <Button Command="{Binding AddCommand}" Content="Add" HorizontalAlignment="Left" Margin="641,53,0,0" VerticalAlignment="Top" Width="42" />
         <Button Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedItem}" Content="Update" HorizontalAlignment="Left" Margin="696,53,0,0" VerticalAlignment="Top" />
         <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedItem}" Content="Delete" HorizontalAlignment="Left" Margin="752,53,0,0" VerticalAlignment="Top"/>

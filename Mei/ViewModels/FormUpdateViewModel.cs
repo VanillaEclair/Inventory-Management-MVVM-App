@@ -1,4 +1,5 @@
 ﻿using Mei.Commands;
+using Mei.Interfaces;
 using Mei.MVVM;
 using Mei.Services;
 using Mei.Stores;
@@ -26,7 +27,6 @@ namespace Mei.ViewModels
                 OnPropertyChanged();
 				}
 		}
-
 
 		private string? itemName;
 
@@ -91,19 +91,19 @@ namespace Mei.ViewModels
 		//}'
 
 		private readonly EditItemStore _editItemStore;
-		private readonly SQLfunctions _sQLfunctions;
 		private readonly RefreshStore _refreshStore;
 		private readonly CategoryStore _categoryStore;
+		private readonly IItemRepository _itemRepository;
 
 		public ICommand FormSubmitCommand { get; }
 		public ICommand FormCancelCommand { get; }
 
-        public FormUpdateViewModel(EditItemStore editItemStore, SQLfunctions sQLfunctions, RefreshStore refreshStore, CategoryStore categoryStore)
+        public FormUpdateViewModel(EditItemStore editItemStore, IItemRepository itemRepository, RefreshStore refreshStore, CategoryStore categoryStore)
         {
 
-            _sQLfunctions = sQLfunctions;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
+            _itemRepository = itemRepository;
 
 
             var Item = editItemStore.ItemToEdit;
@@ -121,8 +121,9 @@ namespace Mei.ViewModels
 
 
 
-            FormSubmitCommand = new FormUpdateSubmitCommand(this, _sQLfunctions, _refreshStore);
+            FormSubmitCommand = new FormUpdateSubmitCommand(this, _itemRepository, _refreshStore);
             FormCancelCommand = new FormAddCancelCommand();
+
 
 
 

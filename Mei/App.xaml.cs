@@ -1,12 +1,15 @@
-﻿using Mei.Services;
+﻿using Mei.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using Mei.Models;
+using Mei.Services;
 using Mei.Stores;
 using Mei.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
-using Mei.DependencyInjection;
-using Mei.Models;
 
 namespace Mei
 {
@@ -17,8 +20,9 @@ namespace Mei
 
         public App()
         {
+
             var services = new ServiceCollection();
-            services.AddAppServices();     // Only register ONCE!
+            services.AddAppServices();     // Regi DIs
 
             _serviceProvider = services.BuildServiceProvider();
         }

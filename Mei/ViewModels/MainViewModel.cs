@@ -1,15 +1,15 @@
-﻿using Mei.MVVM;
-using Mei.Stores;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using Mei.MVVM;
+//using Mei.Stores;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace Mei.ViewModels
-{
-   public class MainViewModel : ViewModelBase
-    {
+//namespace Mei.ViewModels
+//{
+//   public class MainViewModel : ViewModelBase
+//    {
         //Check Seans Tutorial
         //private readonly NavigationStore _navigationStore;
         //private readonly FormAddNavStore _FormAddNavStore;
@@ -41,5 +41,5 @@ namespace Mei.ViewModels
         //{
         //    throw new NotImplementedException();
         //}
-    }
-}
+//    }
+//}

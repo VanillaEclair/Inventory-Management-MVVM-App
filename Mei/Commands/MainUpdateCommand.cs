@@ -1,4 +1,5 @@
-﻿using Mei.Models;
+﻿using Mei.Interfaces;
+using Mei.Models;
 using Mei.Services;
 using Mei.Stores;
 using Mei.ViewModels;
@@ -16,18 +17,18 @@ namespace Mei.Commands
     public class MainUpdateCommand : CommandBase
     {
 
-        private readonly SQLfunctions _sQLFunctions;
         private readonly EditItemStore _editItemStore;
         private readonly RefreshStore _refreshStore;
         private readonly CategoryStore _categoryStore;
+        private readonly IItemRepository _itemRepository;
 
 
-        public MainUpdateCommand(SQLfunctions sQLFunctions, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
+        public MainUpdateCommand(IItemRepository itemRepository, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
-            _sQLFunctions = sQLFunctions;
             _editItemStore = editItemStore;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
+            _itemRepository = itemRepository;
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -84,7 +85,7 @@ namespace Mei.Commands
 
             FormUpdateView updateForm = new FormUpdateView
             {
-                DataContext = new FormUpdateViewModel(_editItemStore, _sQLFunctions, _refreshStore, _categoryStore)
+                DataContext = new FormUpdateViewModel(_editItemStore, _itemRepository, _refreshStore, _categoryStore)
             };
 
             updateForm.Show();

@@ -26,84 +26,29 @@ namespace Mei.Services
             _formAddViewModel = formAddViewModel;
         }
 
-        public int GetTotalUsers()
-        {
-            using (var conn = new MySqlConnection(connStr))
-            {
-                conn.Open();
-                using (var cmd = new MySqlCommand("SELECT COUNT(*) FROM Users", conn))
-                {
-                    return Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
-        }
-
-
-        public bool DBquery(string sql, Dictionary<string, object> parameters)
-        {
-            int count = 0;
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connStr))
-                {
-                    conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        foreach (var p in parameters)
-                            cmd.Parameters.AddWithValue(p.Key, p.Value);
-
-                        using (MySqlDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read()) count++;
-                        }
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            return count == 1;
-        }
-
         //Depency Injection???
-        public bool Authenticate(string username, string password)
+        public async Task<bool> AuthenticateAsync(string username, string password)
         {
-            return CheckUser(username, password);
-        }
-
-
-        private bool CheckUser(string username, string password)
-        {
-            int count = 0;
-
-            string sqlCommand = $"SELECT * FROM login WHERE username='{username}' and password='{password}'";
+            const string sqlCommand = "SELECT COUNT(*) FROM login WHERE username=@username AND password=@password";
 
             try
             {
-                using (var conn = new MySqlConnection(connStr))
-                {
-                    conn.Open();
-                    using (var cmd = new MySqlCommand(sqlCommand, conn))
-                    {
-                        count =  Convert.ToInt32(cmd.ExecuteScalar());
-                    }
-                }
-            }
-            catch (Exception)
-            {
+                using var conn = new MySqlConnection(connStr);
+                await conn.OpenAsync();
 
+                using var cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+
+                var result = await cmd.ExecuteScalarAsync();
+                int count = Convert.ToInt32(result);
+
+                return count == 1;
+            }
+            catch
+            {
                 throw;
             }
-
-            if(count==1)
-            {
-                return true;
-            }
-           
-            
-            return false;
         }
 
     }

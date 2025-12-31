@@ -14,5 +14,6 @@ namespace Mei.Stores
         {
             RefreshRequested?.Invoke();
         }
+
     }
 }

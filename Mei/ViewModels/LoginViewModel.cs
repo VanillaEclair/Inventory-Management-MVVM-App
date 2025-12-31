@@ -1,4 +1,5 @@
 ﻿using Mei.Commands;
+using Mei.Interfaces;
 using Mei.Models;
 using Mei.MVVM;
 using Mei.Services;
@@ -59,7 +60,8 @@ namespace Mei.ViewModels
         private readonly NavigationStore _navigationStore;
         private readonly VMFactory _vMFactory;
         private readonly LoginViewModel _loginViewModel;
-        private readonly SQLfunctions _sQLfunctions;
+        private readonly IItemRepository _itemRepository;
+        //private readonly SQLfunctions _sQLfunctions;
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly EditItemStore _editItemStore;
         private readonly RefreshStore _refreshStore;
@@ -68,18 +70,18 @@ namespace Mei.ViewModels
         public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
 
         // Remove LoginViewModel parameter and use 'this' for the command
-        public LoginViewModel(NavigationStore navigationStore, AuthService authService, VMFactory vMFactory, SQLfunctions sQLfunctions, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
+        public LoginViewModel(NavigationStore navigationStore, AuthService authService, VMFactory vMFactory, IItemRepository itemRepository, EditItemStore editItemStore, RefreshStore refreshStore, CategoryStore categoryStore)
         {
             _navigationStore = navigationStore;
             _authService = authService;
             _vMFactory = vMFactory;
-            _sQLfunctions = sQLfunctions;
+            _itemRepository = itemRepository;
 
             _editItemStore = editItemStore;
             _refreshStore = refreshStore;
             _categoryStore = categoryStore;
 
-            LoginCommand = new LoginCommand(_navigationStore, _authService, _vMFactory, this, _sQLfunctions, _editItemStore, _refreshStore, _categoryStore);
+            LoginCommand = new LoginCommand(_navigationStore, _authService, _vMFactory, this, _itemRepository, _editItemStore, _refreshStore, _categoryStore);
 
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
 
