@@ -4,7 +4,7 @@ A simple desktop inventory management application built using **WPF** and the **
 The application supports basic inventory operations and user authentication and is currently under active development.
 
 ---
-
+![image](https://github.com/VanillaEclair/Inventory-Management-MVVM-App/blob/master/Mei/MainView.png)
 ---
 
 ## Features
