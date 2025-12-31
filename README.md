@@ -5,9 +5,10 @@ The application supports basic inventory operations and user authentication and 
 
 ---
 
+---
+
 ## Features
 
-- User login and authentication
 - Create, Read, Update, and Delete (CRUD) inventory records
 - Inventory data displayed in a tabular format
 - MVVM-based architecture for separation of concerns
@@ -21,15 +22,15 @@ The application supports basic inventory operations and user authentication and 
 - WPF (.NET)
 - MVVM Pattern
 - XAML
-- MySQL (or specify your actual database, if applicable)
+- MySQL
 
 ---
 
 ## Requirements
 
 - Windows 10 or later
-- Visual Studio 2022
-- .NET (specify version, e.g. .NET 6 / .NET Framework 4.8)
+- Visual Studio 2022 or later
+- .NET 8
 
 ---
 
